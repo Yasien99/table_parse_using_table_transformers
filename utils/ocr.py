@@ -8,12 +8,13 @@ import pytesseract
 # pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
 
 # Set the languages you want to use for OCR
-custom_config = r'-l eng+ara --psm 6'
+custom_config = r'-l eng+spa --psm 6'
+
 
 def apply_ocr(cell_coordinates, cropped_table):
     data = dict()
     max_num_columns = 0
-    for idx, row in enumerate(tqdm(cell_coordinates)):
+    for idx, row in enumerate(cell_coordinates):  # Removed tqdm here
         row_text = []
         for cell in row["cells"]:
             cell_image = np.array(cropped_table.crop(cell["cell"]))
