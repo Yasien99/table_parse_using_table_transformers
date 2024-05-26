@@ -1,5 +1,6 @@
 import streamlit as st
 from PIL import Image
+import pandas as pd
 from utils.model import load_detection_model, load_structure_model
 from utils.preprocessing import prepare_image, prepare_cropped_image
 from utils.postprocessing import outputs_to_objects, objects_to_crops
@@ -62,3 +63,7 @@ if uploaded_file is not None:
     # Save results as CSV
     save_csv(data)
     st.write("CSV file saved as output.csv")
+
+    st.write("Extracted Table Data (from output.csv):")
+    df = pd.read_csv('output.csv')
+    st.dataframe(df)
