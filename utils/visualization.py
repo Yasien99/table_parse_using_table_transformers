@@ -61,6 +61,6 @@ def plot_results(cells, class_to_visualize, id2label, cropped_table):
         if label == class_to_visualize:
             xmin, ymin, xmax, ymax = tuple(bbox)
             ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, fill=False, color="red", linewidth=3))
-            text = f'{cell["label"]}: {score:0.2f}'
-            ax.text(xmin, ymin, text, fontsize=15, bbox=dict(facecolor='yellow', alpha=0.5))
+            # text = f'{cell["label"]}: {score:0.2f}'
+            ax.text(xmin, ymin, fontsize=15, bbox=dict(facecolor='yellow', alpha=0.5))
     plt.axis('off')
