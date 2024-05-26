@@ -1,21 +1,26 @@
 import numpy as np
-import easyocr
 from tqdm.auto import tqdm
 import csv
+from PIL import Image
+import pytesseract
 
-reader = easyocr.Reader(['en'])  # this needs to run only once to load the model into memory
+# Set tesseract_cmd to the path of the Tesseract executable if it's not in your PATH
+# pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
+
+# Set the languages you want to use for OCR
+custom_config = r'-l eng+spa --psm 6'
+
 
 def apply_ocr(cell_coordinates, cropped_table):
     data = dict()
     max_num_columns = 0
-    for idx, row in enumerate(tqdm(cell_coordinates)):
+    for idx, row in enumerate(cell_coordinates):  # Removed tqdm here
         row_text = []
         for cell in row["cells"]:
             cell_image = np.array(cropped_table.crop(cell["cell"]))
-            result = reader.readtext(np.array(cell_image))
-            if len(result) > 0:
-                text = " ".join([x[1] for x in result])
-                row_text.append(text)
+            cell_image_pil = Image.fromarray(cell_image)
+            result = pytesseract.image_to_string(cell_image_pil, config=custom_config)
+            row_text.append(result.strip())
         if len(row_text) > max_num_columns:
             max_num_columns = len(row_text)
         data[idx] = row_text
